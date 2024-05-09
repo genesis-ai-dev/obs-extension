@@ -1,0 +1,40 @@
+{
+  "name": "obs-extension",
+  "displayName": "obs-extension",
+  "description": "A VSCode extension for viewing and editing Open Bible Stories (OBS)",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "obs-extension.showObs",
+        "title": "OBS: Show"
+      }
+    ]
+  },
+  "scripts": {
+    "install:all": "pnpm install && cd webview-ui && pnpm install",
+    "start:webview": "cd webview-ui && pnpm run start",
+    "build:webview": "cd webview-ui && pnpm run build",
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/node": "^20.12.11",
+    "@types/vscode": "^1.89.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "eslint": "^9.2.0",
+    "glob": "^10.3.14",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vscode-test": "^1.6.1"
+  }
+}
