@@ -13,6 +13,17 @@
         "command": "obs-extension.showObs",
         "title": "OBS: Show"
       }
+    ],
+    "customEditors": [
+      {
+        "viewType": "codex.obs.editor",
+        "displayName": "Obs Editor",
+        "selector": [
+          {
+            "filenamePattern": "**/ingredients/??.md"
+          }
+        ]
+      }
     ]
   },
   "scripts": {

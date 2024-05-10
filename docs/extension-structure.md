@@ -11,11 +11,11 @@ The two most important directories to take note of are the following:
 
 The `src` directory contains all of the extension-related source code and can be thought of as containing the "backend" code/logic for the entire extension. Inside of this directory you'll find the:
 
-- `panels` directory
+- `providers` directory
 - `utilities` directory
 - `extension.ts` file
 
-The `panels` directory contains all of the webview-related code that will be executed within the extension context. It can be thought of as the place where all of the "backend" code for each webview panel is contained.
+The `providers` directory contains all of the custom editor / webview-related code that will be executed within the extension context. It can be thought of as the place where all of the "backend" code for each webview panel / custom editor is contained.
 
 This directory will typically contain individual TypeScript or JavaScript files that contain a class which manages the state and behavior of a given webview panel. Each class is usually in charge of:
 

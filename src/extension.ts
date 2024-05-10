@@ -1,12 +1,6 @@
-import { commands, ExtensionContext } from "vscode";
-import { HelloWorldPanel } from "./panels/HelloWorldPanel";
+import { ExtensionContext } from "vscode";
+import { ObsEditorProvider } from "./providers/ObsEditorProvider";
 
 export function activate(context: ExtensionContext) {
-  // Create the show hello world command
-  const showHelloWorldCommand = commands.registerCommand("obs-extension.showObs", () => {
-    HelloWorldPanel.render(context.extensionUri);
-  });
-
-  // Add command to the extension context
-  context.subscriptions.push(showHelloWorldCommand);
+  context.subscriptions.push(ObsEditorProvider.register(context));
 }
