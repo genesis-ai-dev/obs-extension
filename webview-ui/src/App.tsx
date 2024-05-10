@@ -1,21 +1,35 @@
-import { vscode } from "./utilities/vscode";
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
+import { useEffect, useState } from "react";
+import "react-virtualized/styles.css";
 import "./App.css";
+import { vscode } from "./utilities/vscode";
+import { markdownToStories } from "./utilities/editor";
+import { useDocument } from "./hooks/useDocument";
+import ObsReadonlyPanel from "./components/ObsReadonlyPanel";
+import type { ObsStory } from "./types";
 
 function App() {
-  function handleHowdyClick() {
-    vscode.postMessage({
-      command: "hello",
-      text: "Hey there partner! 🤠",
-    });
-  }
+  const [stories, setStories] = useState<ObsStory[]>([]);
+  const { document: markdownDoc } = useDocument();
+
+  useEffect(() => {
+    vscode.setMessageListeners();
+  }, []);
+
+  useEffect(() => {
+    if (markdownDoc) {
+      setStories(markdownToStories(markdownDoc ?? "") as []);
+    }
+  }, [markdownDoc]);
 
   return (
-    <main>
-      <h1>Hello World!</h1>
-      <VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton>
-    </main>
+    <div className="card">
+      <ObsReadonlyPanel obsStory={stories} />
+    </div>
   );
 }
+
+// TODO:
+//   - I need to make sure the backend has a message posting for update!
+//   - I need to make sure the backend is actually registering this webview code.
 
 export default App;

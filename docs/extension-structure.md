@@ -1,6 +1,6 @@
 # Extension structure
 
-This section provides a quick introduction into how this sample extension is organized and structured.
+This section provides a quick introduction into how this extension is organized and structured.
 
 The two most important directories to take note of are the following:
 

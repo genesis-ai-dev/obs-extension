@@ -1,14 +1,6 @@
 import type { WebviewApi } from "vscode-webview";
+import { MessageType } from "../types";
 
-/**
- * A utility wrapper around the acquireVsCodeApi() function, which enables
- * message passing and state management between the webview and extension
- * contexts.
- *
- * This utility also enables webview code to be run in a web browser-based
- * dev server by using native web browser features that mock the functionality
- * enabled by acquireVsCodeApi.
- */
 class VSCodeAPIWrapper {
   private readonly vsCodeApi: WebviewApi<unknown> | undefined;
 
@@ -28,11 +20,28 @@ class VSCodeAPIWrapper {
    *
    * @param message Abitrary data (must be JSON serializable) to send to the extension context.
    */
-  public postMessage(message: unknown) {
+  public postMessage(message: { readonly type: MessageType; readonly payload: unknown }) {
     if (this.vsCodeApi) {
       this.vsCodeApi.postMessage(message);
+    }
+  }
+
+  public setMessageListeners(callback?: (event: MessageEvent) => void) {
+    if (this.vsCodeApi) {
+      window.addEventListener(
+        "message",
+        callback
+          ? callback
+          : (event) => {
+              const message = event.data; // The json data that the extension sent
+              switch (message.type) {
+                case MessageType.showDialog:
+                  return;
+              }
+            }
+      );
     } else {
-      console.log(message);
+      console.error("NO VSCODE API FOUND");
     }
   }
 
