@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getNonce } from "../utilities/getNonce";
 import { getUri } from "../utilities/getUri";
+import { MessageType } from "../types";
 
 export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
   private _webview: vscode.Webview | undefined;
@@ -63,7 +64,22 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
     });
 
     // Receive message from the webview.
-    webviewPanel.webview.onDidReceiveMessage(async () => {});
+    webviewPanel.webview.onDidReceiveMessage(async (e: { type: MessageType; payload: unknown }) => {
+      const { type, payload } = e;
+
+      switch (type) {
+        case MessageType.save: {
+          const edit = new vscode.WorkspaceEdit();
+          edit.replace(
+            document.uri,
+            new vscode.Range(0, 0, document.lineCount, 0),
+            payload as string
+          );
+          vscode.workspace.applyEdit(edit);
+          return;
+        }
+      }
+    });
 
     this._webview = webviewPanel.webview;
 
