@@ -1,4 +1,4 @@
-import type { ObsStory } from "../types";
+import type { ObsStory } from "../../../src/types";
 
 const ObsReadonlyPanel = ({ obsStory }: { obsStory: ObsStory[] }) => {
   return (
