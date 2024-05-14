@@ -1,13 +1,17 @@
 import * as vscode from "vscode";
 import { getNonce } from "../utilities/getNonce";
 import { getUri } from "../utilities/getUri";
+import { VIEW_TYPES } from "../types";
 import { MessageType } from "../types";
+import { initializeStateStore } from "../stateStore";
 
 export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
   private _webview: vscode.Webview | undefined;
   private _context: vscode.ExtensionContext | undefined;
 
-  static readonly viewType = "codex.obs.editor";
+  private globalState: Awaited<ReturnType<typeof initializeStateStore>> | undefined;
+
+  static readonly viewType = VIEW_TYPES.EDITOR;
 
   public static register(context: vscode.ExtensionContext): vscode.Disposable {
     const provider = new ObsEditorProvider(context);
@@ -20,6 +24,10 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
+
+    initializeStateStore().then((store) => {
+      this.globalState = store;
+    });
   }
 
   public async resolveCustomTextEditor(
@@ -68,6 +76,9 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
       const { type, payload } = e;
 
       switch (type) {
+        case MessageType.showDialog:
+          vscode.window.showInformationMessage(e.payload as string);
+          return;
         case MessageType.save: {
           const edit = new vscode.WorkspaceEdit();
           edit.replace(
@@ -76,6 +87,31 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
             payload as string
           );
           vscode.workspace.applyEdit(edit);
+          return;
+        }
+        case MessageType.UPDATE_OBS_REF: {
+          if (!this.globalState) {
+            await initializeStateStore().then((store) => {
+              this.globalState = store;
+            });
+          }
+
+          const storyId = document.fileName.split("/").pop()?.split(".")[0];
+
+          if (!storyId) {
+            throw new Error("Unable to get the story id from the document path");
+          }
+          this.globalState?.updateStoreState({
+            key: "obsRef",
+            value: {
+              paragraph: (
+                e.payload as {
+                  paragraphId: number;
+                }
+              ).paragraphId.toString(),
+              storyId: storyId,
+            },
+          });
           return;
         }
       }
@@ -109,7 +145,7 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';"> -->
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
-          <title>Hello World</title>
+          <title>OBS View</title>
         </head>
         <body>
           <div id="root"></div>

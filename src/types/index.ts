@@ -1,3 +1,27 @@
+export interface VerseRefGlobalState {
+  verseRef: string;
+  uri: string;
+}
+
+export interface SelectedTextDataWithContext {
+  selection: string;
+  completeLineContent: string | null;
+  vrefAtStartOfLine: string | null;
+  selectedText: string | null;
+}
+
+export type OBSRef = {
+  storyId: string;
+  paragraph: string;
+};
+
+export enum VIEW_TYPES {
+  EDITOR = "codex.obs.editor",
+  OBS_OUTLINE = "scribe-vsc.obs-outline",
+  RESOURCES = "codex.resources",
+  CREATE_PROJECT = "codex.obs.createProject",
+}
+
 export enum MessageType {
   showDialog = "showDialog",
   save = "save",
