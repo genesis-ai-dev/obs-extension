@@ -8,6 +8,26 @@
   },
   "main": "./out/extension.js",
   "contributes": {
+    "views": {
+      "scribe-vsc-obs-sidebar": [
+        {
+          "id": "scribe-vsc.obs-outline",
+          "name": "Stories Outline",
+          "icon": "$(file-media)",
+          "type": "webview",
+          "contextualTitle": "Scribe Obs Story Outline"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "scribe-vsc-obs-sidebar",
+          "title": "OBS Editor",
+          "icon": "$(file-media)"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "obs-extension.showObs",
