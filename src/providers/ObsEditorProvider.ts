@@ -90,7 +90,13 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
     // The CSS file from the React build output
     const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
     // The View JS file from the React build output
-    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
+    const scriptUri = getUri(webview, extensionUri, [
+      "webview-ui",
+      "build",
+      "assets",
+      "views",
+      "ObsView.js",
+    ]);
 
     const nonce = getNonce();
 
