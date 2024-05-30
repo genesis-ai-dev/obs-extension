@@ -6,6 +6,16 @@ import { VIEW_TYPES } from "../types";
 import { MessageType } from "../types";
 import { initializeStateStore } from "../stateStore";
 
+/**
+ * Extension provider that is responsible for opening both the editable
+ * and ReadOnly versions of OBS.
+ *
+ * Editable: OBS Custom Editor Extension
+ * ReadOnly: OBSResource Provider
+ *
+ * These are both opened when the openStory message is received from the
+ * StoryOutline webview
+ */
 export class StoryOutlineProvider implements vscode.WebviewViewProvider {
   private _webviewView: vscode.WebviewView | undefined;
   private _context: vscode.ExtensionContext | undefined;
@@ -57,16 +67,45 @@ export class StoryOutlineProvider implements vscode.WebviewViewProvider {
             return;
           }
 
-          const storyURI = vscode.Uri.joinPath(
+          // Open ObsEditor Panel on Left
+          const editableStoryURI = vscode.Uri.joinPath(
             vscode.workspace?.workspaceFolders?.[0].uri,
             "ingredients",
             `${(e.payload as Record<string, any>)?.storyNumber}.md`
           );
-          await vscode.commands.executeCommand("vscode.openWith", storyURI, VIEW_TYPES.EDITOR, {
-            preserveFocus: true,
-            preview: false,
-            viewColumn: vscode.ViewColumn.One,
-          });
+
+          await vscode.commands.executeCommand(
+            "vscode.openWith",
+            editableStoryURI,
+            VIEW_TYPES.EDITOR,
+            {
+              preserveFocus: true,
+              preview: false,
+              viewColumn: vscode.ViewColumn.One,
+            }
+          );
+
+          const readOnlyStoryURI = vscode.Uri.joinPath(
+            vscode.workspace?.workspaceFolders?.[0].uri,
+            ".project",
+            "resources",
+            "obs",
+            "content",
+            `${(e.payload as Record<string, any>)?.storyNumber}.md`
+          );
+
+          // Open ObsReadOnly Panel on right
+          await vscode.commands.executeCommand(
+            "vscode.openWith",
+            readOnlyStoryURI,
+            VIEW_TYPES.EDITOR,
+            {
+              preserveFocus: false,
+              preview: false,
+              viewColumn: vscode.ViewColumn.Two,
+            }
+          );
+
           await this._context?.workspaceState?.update(
             "currentStoryId",
             (e.payload as Record<string, any>)?.storyNumber

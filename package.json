@@ -41,6 +41,9 @@
         "selector": [
           {
             "filenamePattern": "**/ingredients/??.md"
+          },
+          {
+            "filenamePattern": "**/.project/resources/obs/content/??.md"
           }
         ]
       }
