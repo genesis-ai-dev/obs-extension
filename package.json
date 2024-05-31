@@ -1,17 +1,18 @@
 {
   "name": "obs-extension",
-  "displayName": "obs-extension",
+  "displayName": "OBS Extension",
   "description": "A VSCode extension for viewing and editing Open Bible Stories (OBS)",
   "version": "0.0.1",
+  "publisher": "project-accelerate",
   "engines": {
     "vscode": "^1.75.0"
   },
   "main": "./out/extension.js",
   "contributes": {
     "views": {
-      "scribe-vsc-obs-sidebar": [
+      "stories-outline": [
         {
-          "id": "scribe-vsc.obs-outline",
+          "id": "obs-extension.obs-outline",
           "name": "Stories Outline",
           "icon": "$(file-media)",
           "type": "webview",
@@ -21,7 +22,7 @@
       "project-manager": [
         {
           "type": "webview",
-          "id": "codex.obs.project-manager",
+          "id": "obs-extension.project-manager",
           "name": "Project Manager",
           "icon": "$(tools)",
           "contextualTitle": "Project Manager"
@@ -31,7 +32,7 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "scribe-vsc-obs-sidebar",
+          "id": "stories-outline",
           "title": "OBS Editor",
           "icon": "$(file-media)"
         },
@@ -46,11 +47,36 @@
       {
         "command": "obs-extension.showObs",
         "title": "OBS: Show"
+      },
+      {
+        "command": "obs-extension.initializeNewProject",
+        "title": "Initialize New Project",
+        "category": "OBS Project Management"
+      },
+      {
+        "command": "obs-extension.nameProject",
+        "title": "Name Project",
+        "category": "OBS Project Management"
+      },
+      {
+        "command": "obs-extension.openProjectSettings",
+        "title": "Open Project Settings",
+        "category": "OBS Project Management"
+      },
+      {
+        "command": "obs-extension.startWalkthrough",
+        "title": "Start Walkthrough",
+        "category": "OBS Project Management"
+      },
+      {
+        "command": "obs-extension.startTranslating",
+        "title": "Start Translating",
+        "category": "OBS Project Management"
       }
     ],
     "customEditors": [
       {
-        "viewType": "codex.obs.editor",
+        "viewType": "obs-extension.editor",
         "displayName": "Obs Editor",
         "selector": [
           {
@@ -61,7 +87,37 @@
           }
         ]
       }
-    ]
+    ],
+    "configuration": {
+      "title": "OBS Project Manager",
+      "properties": {
+        "obs-extension.projectName": {
+          "type": "string",
+          "default": "",
+          "description": "Name of the project"
+        },
+        "obs-extension.userName": {
+          "type": "string",
+          "default": "",
+          "description": "Name of the user"
+        },
+        "obs-extension.abbreviation": {
+          "type": "string",
+          "default": "",
+          "description": "Project abbreviation"
+        },
+        "obs-extension.sourceLanguage": {
+          "type": "object",
+          "default": {},
+          "description": "Source language for the project"
+        },
+        "obs-extension.targetLanguage": {
+          "type": "object",
+          "default": {},
+          "description": "Target language for the project"
+        }
+      }
+    }
   },
   "scripts": {
     "install:all": "pnpm install && cd webview-ui && pnpm install",

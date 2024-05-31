@@ -4,6 +4,7 @@ import { getNonce } from "../utilities/getNonce";
 import { getUri } from "../utilities/getUri";
 import { VIEW_TYPES } from "../types";
 import { MessageType } from "../types";
+import { COMMAND_TYPE } from "../types";
 
 export class ProjectManagerProvider implements vscode.WebviewViewProvider {
   private _webviewView: vscode.WebviewView | undefined;
@@ -47,22 +48,22 @@ export class ProjectManagerProvider implements vscode.WebviewViewProvider {
       async (message: { type: MessageType; payload?: unknown }) => {
         switch (message.type) {
           case MessageType.RENAME_PROJECT:
-            vscode.commands.executeCommand("obs-extension.nameProject", true);
+            vscode.commands.executeCommand(COMMAND_TYPE.NAME_PROJECT, true);
             break;
           case MessageType.CHANGE_USERNAME:
-            vscode.commands.executeCommand("obs-extension.userName", true);
+            vscode.commands.executeCommand(COMMAND_TYPE.CHANGE_USERNAME, true);
             break;
           case MessageType.CHANGE_SOURCE_LANG:
-            vscode.commands.executeCommand("obs-extension.promptUserForSourceLanguage");
+            vscode.commands.executeCommand(COMMAND_TYPE.PROMPT_SOURCE);
             break;
           case MessageType.CHANGE_TARGET_LANG:
-            vscode.commands.executeCommand("obs-extension.promptUserForTargetLanguage");
+            vscode.commands.executeCommand(COMMAND_TYPE.PROMPT_TARGET);
             break;
           case MessageType.DOWNLOAD_SOURCE_OBS:
-            vscode.commands.executeCommand("obs-extension.downloadSourceObs");
+            vscode.commands.executeCommand(COMMAND_TYPE.DOWNLOAD_SOURCE);
             break;
           case MessageType.CREATE_OBS_PROJECT:
-            vscode.commands.executeCommand("obs-extension.startWalkthrough");
+            vscode.commands.executeCommand(COMMAND_TYPE.START_WALKTHROUGH);
             break;
           default:
             console.error(`Unknown command: ${message.type}`);

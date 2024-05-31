@@ -16,9 +16,24 @@ export type OBSRef = {
 };
 
 export enum VIEW_TYPES {
-  EDITOR = "codex.obs.editor",
-  OBS_OUTLINE = "scribe-vsc.obs-outline",
-  PROJECT_MANAGER = "codex.obs.project-manager",
+  EDITOR = "obs-extension.editor",
+  OBS_OUTLINE = "obs-extension.obs-outline",
+  PROJECT_MANAGER = "obs-extension.project-manager",
+}
+
+export enum COMMAND_TYPE {
+  INITIALIZE_NEW_PROJECT = "obs-extension.initializeNewProject",
+  INITIALIZE_IMPORT_PROJECT = "obs-extension.initializeImportProject",
+  NAME_PROJECT = "obs-extension.nameProject",
+  CHANGE_USERNAME = "obs-extension.userName",
+  OPEN_PROJECT_SETTINGS = "obs-extension.openProjectSettings",
+  EDIT_PROJECT_SETTINGS = "obs-extension.editProjectSettings",
+  START_WALKTHROUGH = "obs-extension.startWalkthrough",
+  START_TRANSLATING = "obs-extension.startTranslating",
+  PROMPT_TARGET = "obs-extension.promptUserForTargetLanguage",
+  PROMPT_SOURCE = "obs-extension.promptUserForSourceLanguage",
+  DOWNLOAD_SOURCE = "obs-extension.downloadSourceTextBibles",
+  SET_TARGET_FONT = "obs-extension.setEditorFontToTargetLanguage",
 }
 
 export enum MessageType {
