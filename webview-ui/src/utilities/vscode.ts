@@ -20,7 +20,7 @@ class VSCodeAPIWrapper {
    *
    * @param message Abitrary data (must be JSON serializable) to send to the extension context.
    */
-  public postMessage(message: { readonly type: MessageType; readonly payload: unknown }) {
+  public postMessage(message: { readonly type: MessageType; readonly payload?: unknown }) {
     if (this.vsCodeApi) {
       this.vsCodeApi.postMessage(message);
     }
@@ -35,7 +35,7 @@ class VSCodeAPIWrapper {
           : (event) => {
               const message = event.data; // The json data that the extension sent
               switch (message.type) {
-                case MessageType.showDialog:
+                case MessageType.SHOW_DIALOG:
                   return;
               }
             }
