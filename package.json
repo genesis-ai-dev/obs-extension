@@ -117,7 +117,107 @@
           "description": "Target language for the project"
         }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "obsWalkthrough",
+        "title": "Start a Open Bible Stories (OBS) Project",
+        "description": "A simple walkthrough to help you start a new OBS translation project.",
+        "steps": [
+          {
+            "id": "openFolder",
+            "title": "Open Project Folder",
+            "description": "First, let's open a folder where your new OBS project will be initialized.\n[Open Project Folder](command:workbench.action.files.openFolder)",
+            "media": {
+              "image": "./src/media/folder-active.png",
+              "altText": "Open Project Folder"
+            },
+            "completionEvents": [
+              "onFolderSelected"
+            ],
+            "when": "workbenchState == empty"
+          },
+          {
+            "id": "projectName",
+            "title": "Name Project",
+            "description": "Now that we have a folder, let's name your new OBS project.\n[Name Project](command:obs-extension.nameProject)",
+            "media": {
+              "image": "./src/media/name-project.png",
+              "altText": "Name Project"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.nameProject"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
+            "id": "userName",
+            "title": "Set User Name",
+            "description": "Now that we have a Project name, let's set the user name for your new OBS project.\n[Set User Name](command:obs-extension.userName)",
+            "media": {
+              "image": "./src/media/user-name.png",
+              "altText": "Set User Name"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.userName"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
+            "id": "selectSourceLanguage",
+            "title": "Select Source Language",
+            "description": "Now that we have a username, let's set the source language for your new OBS project.\n[Select Source Language](command:obs-extension.promptUserForSourceLanguage)\n",
+            "media": {
+              "image": "./src/media/source-and-target.png",
+              "altText": "Select Source Language"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.promptUserForSourceLanguage"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
+            "id": "selectTargetLanguage",
+            "title": "Select Target Language",
+            "description": "Now that we have a source language, let's set the target language for your new OBS project.\n[Select target Language](command:obs-extension.promptUserForTargetLanguage)\n",
+            "media": {
+              "image": "./src/media/source-and-target.png",
+              "altText": "Select Source Language"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.promptUserForTargetLanguage"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
+            "id": "initializeProject",
+            "title": "Create files",
+            "description": "Now that we have our congiguration, let's initialize your new OBS project.\n[Create New Project](command:obs-extension.initializeNewProject)\n or \n [Import USFM Project](command:obs-extension.initializeImportProject)",
+            "media": {
+              "image": "./src/media/initialize-project.png",
+              "altText": "Initialize Project"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.initializeNewProject"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
+            "id": "startTranslating",
+            "title": "Start Translating",
+            "description": "Now that we've initialized all these files, let's start translating your new OBS project!\n[Start Translating](command:obs-extension.startTranslating)",
+            "media": {
+              "image": "./src/media/edit.png",
+              "altText": "Start Translating"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.startTranslating"
+            ],
+            "when": "workbenchState !== empty"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "install:all": "pnpm install && cd webview-ui && pnpm install",

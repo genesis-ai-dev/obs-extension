@@ -85,32 +85,29 @@ export async function activate(context: ExtensionContext) {
     })
   );
 
-  // context.subscriptions.push(commands.registerCommand(COMMAND_TYPE., ));
+  context.subscriptions.push(
+    commands.registerCommand(COMMAND_TYPE.START_WALKTHROUGH, () => {
+      commands.executeCommand(
+        "workbench.action.openWalkthrough",
+        {
+          category: "project-accelerate.obs-extension#obsWalkthrough",
+          step: "project-accelerate.obs-extension#openFolder",
+        },
+        true
+      );
+    })
+  );
 
-  // TODO: Walkthrough commands
-  // context.subscriptions.push(
-  //   commands.registerCommand(COMMAND_TYPE.START_WALKTHROUGH, () => {
-  //     commands.executeCommand(
-  //       "workbench.action.openWalkthrough",
-  //       {
-  //         category: "project-accelerate.codex-project-manager#codexWalkthrough",
-  //         step: "project-accelerate.codex-project-manager#openFolder",
-  //       },
-  //       true
-  //     );
-  //   })
-  // );
-
-  //   context.subscriptions.push(
-  //     commands.registerCommand(COMMAND_TYPE.EDIT_PROJECT_SETTINGS, () => {
-  //       commands.executeCommand(
-  //         "workbench.action.openWalkthrough",
-  //         {
-  //           category: "project-accelerate.codex-project-manager#codexWalkthrough",
-  //           step: "projectName",
-  //         },
-  //         true
-  //       );
-  //     })
-  //   );
+  context.subscriptions.push(
+    commands.registerCommand(COMMAND_TYPE.EDIT_PROJECT_SETTINGS, () => {
+      commands.executeCommand(
+        "workbench.action.openWalkthrough",
+        {
+          category: "project-accelerate.obs-extension#obsWalkthrough",
+          step: "projectName",
+        },
+        true
+      );
+    })
+  );
 }
