@@ -18,31 +18,20 @@ export type OBSRef = {
 export enum VIEW_TYPES {
   EDITOR = "codex.obs.editor",
   OBS_OUTLINE = "scribe-vsc.obs-outline",
-  RESOURCES = "codex.resources",
-  CREATE_PROJECT = "codex.obs.createProject",
+  PROJECT_MANAGER = "codex.obs.project-manager",
 }
 
 export enum MessageType {
-  showDialog = "showDialog",
-  save = "save",
-  openFile = "openFile",
-  OPEN_RESOURCE = "openResource",
-  createProject = "createProject",
-  createObsProject = "createObsProject",
-  openStory = "openStory",
-  DOWNLOAD_RESOURCE = "downloadResource",
-  SYNC_DOWNLOADED_RESOURCES = "syncDownloadedResources",
-  TEST_MESSAGE = "testMessage",
-  SEARCH_QUERY = "searchQuery",
-  SEARCH_RESULTS = "searchResults",
-  SEARCH_TW = "search_tw",
-  GET_TW_CONTENT = "get-tw-content",
-  SYNC_TA_CONTENT = "sync-ta-content",
-  SYNC_TA_FOLDERS = "syncTaFolders",
-  SYNC_TA_FOLDER_CONTENT = "sync-ta-folder-content",
-  GET_TA_FOLDER_CONTENT = "get-ta-FolderContent",
-  GET_TA_CONTENT = "get-ta-content",
+  SHOW_DIALOG = "showDialog",
+  SAVE = "save",
+  OPEN_STORY = "openStory",
   UPDATE_OBS_REF = "updateObsRef",
+  RENAME_PROJECT = "renameProject",
+  CHANGE_USERNAME = "changeUsername",
+  CHANGE_SOURCE_LANG = "changeSourceLanguage",
+  CHANGE_TARGET_LANG = "changeTargetLanguage",
+  DOWNLOAD_SOURCE_OBS = "downloadSourceObs",
+  CREATE_OBS_PROJECT = "createObsProject",
 }
 
 export type Language = {

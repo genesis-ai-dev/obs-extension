@@ -26,7 +26,7 @@ function ObsView() {
     const docMarkdown = storiesToMarkdown(story);
 
     vscode.postMessage({
-      type: MessageType.save,
+      type: MessageType.SAVE,
       payload: docMarkdown,
     });
   };

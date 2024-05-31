@@ -76,10 +76,10 @@ export class ObsEditorProvider implements vscode.CustomTextEditorProvider {
       const { type, payload } = e;
 
       switch (type) {
-        case MessageType.showDialog:
+        case MessageType.SHOW_DIALOG:
           vscode.window.showInformationMessage(e.payload as string);
           return;
-        case MessageType.save: {
+        case MessageType.SAVE: {
           const edit = new vscode.WorkspaceEdit();
           edit.replace(
             document.uri,

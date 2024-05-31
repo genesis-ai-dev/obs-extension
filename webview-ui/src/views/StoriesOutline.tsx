@@ -12,7 +12,7 @@ const StoriesOutline = () => {
 
   const handleClickStory = (storyNumber: string) => {
     vscode.postMessage({
-      type: MessageType.openStory,
+      type: MessageType.OPEN_STORY,
       payload: {
         storyNumber,
       },

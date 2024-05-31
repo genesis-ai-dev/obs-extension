@@ -56,7 +56,7 @@ export class StoryOutlineProvider implements vscode.WebviewViewProvider {
     // Receive message from the webview.
     webviewPanel.webview.onDidReceiveMessage(async (e: { type: MessageType; payload: unknown }) => {
       switch (e.type) {
-        case MessageType.openStory: {
+        case MessageType.OPEN_STORY: {
           if (!vscode.workspace.workspaceFolders?.length) {
             console.error("No workspace opened");
             return;
