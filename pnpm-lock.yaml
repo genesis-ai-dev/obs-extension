@@ -11,6 +11,9 @@ importers:
       '@vscode/codicons':
         specifier: ^0.0.36
         version: 0.0.36
+      codex-types:
+        specifier: ^0.0.2
+        version: 0.0.2
     devDependencies:
       '@types/glob':
         specifier: ^8.1.0
@@ -262,6 +265,9 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
+
+  codex-types@0.0.2:
+    resolution: {integrity: sha512-eE9fXGRsxflvqNAZ9hBcxqlEkSfgM3w69bdYzvahxO2Hs2YZx1Q5Vn+cyznC/855bQXurcgN63+4u4yEmPerkw==}
 
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
@@ -996,6 +1002,8 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  codex-types@0.0.2: {}
 
   color-convert@2.0.1:
     dependencies:

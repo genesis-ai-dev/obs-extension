@@ -94,7 +94,12 @@
         "obs-extension.projectName": {
           "type": "string",
           "default": "",
-          "description": "Name of the project"
+          "description": "Name of the OBS project"
+        },
+        "obs-extension.description": {
+          "type": "string",
+          "default": "",
+          "description": "Description of the OBS project"
         },
         "obs-extension.userName": {
           "type": "string",
@@ -109,12 +114,12 @@
         "obs-extension.sourceLanguage": {
           "type": "object",
           "default": {},
-          "description": "Source language for the project"
+          "description": "Source language for the OBS project"
         },
         "obs-extension.targetLanguage": {
           "type": "object",
           "default": {},
-          "description": "Target language for the project"
+          "description": "Target language for the OBS project"
         }
       }
     },
@@ -242,6 +247,7 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "@vscode/codicons": "^0.0.36"
+    "@vscode/codicons": "^0.0.36",
+    "codex-types": "^0.0.2"
   }
 }

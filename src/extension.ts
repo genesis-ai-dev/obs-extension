@@ -1,8 +1,62 @@
-import { ExtensionContext, Uri, ViewColumn, commands, workspace } from "vscode";
+import {
+  ExtensionContext,
+  Uri,
+  ViewColumn,
+  ConfigurationTarget,
+  commands,
+  workspace,
+} from "vscode";
 import { ObsEditorProvider } from "./providers/ObsEditorProvider";
 import { StoryOutlineProvider } from "./providers/storyOutlineProvider";
 import { ProjectManagerProvider } from "./providers/projectManagerProvider";
 import { COMMAND_TYPE } from "./types";
+import type { ProjectDetails } from "./utilities/projectUtils";
+
+async function updateProjectSettings(projectDetails: ProjectDetails) {
+  const projectSettings = workspace.getConfiguration("codex-project-manager");
+  if (projectDetails.projectName) {
+    await projectSettings.update(
+      "projectName",
+      projectDetails.projectName,
+      ConfigurationTarget.Workspace
+    );
+  }
+  if (projectDetails.description) {
+    await projectSettings.update(
+      "description",
+      projectDetails.description,
+      ConfigurationTarget.Workspace
+    );
+  }
+  if (projectDetails.userName) {
+    await projectSettings.update(
+      "userName",
+      projectDetails.userName,
+      ConfigurationTarget.Workspace
+    );
+  }
+  if (projectDetails.abbreviation) {
+    await projectSettings.update(
+      "abbreviation",
+      projectDetails.abbreviation,
+      ConfigurationTarget.Workspace
+    );
+  }
+  if (projectDetails.sourceLanguage) {
+    await projectSettings.update(
+      "sourceLanguage",
+      projectDetails.sourceLanguage,
+      ConfigurationTarget.Workspace
+    );
+  }
+  if (projectDetails.targetLanguage) {
+    await projectSettings.update(
+      "targetLanguage",
+      projectDetails.targetLanguage,
+      ConfigurationTarget.Workspace
+    );
+  }
+}
 
 export async function activate(context: ExtensionContext) {
   context.subscriptions.push(ObsEditorProvider.register(context));
