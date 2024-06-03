@@ -5,15 +5,17 @@ import {
   ConfigurationTarget,
   commands,
   workspace,
+  window,
 } from "vscode";
 import { ObsEditorProvider } from "./providers/ObsEditorProvider";
 import { StoryOutlineProvider } from "./providers/storyOutlineProvider";
 import { ProjectManagerProvider } from "./providers/projectManagerProvider";
 import { COMMAND_TYPE } from "./types";
 import type { ProjectDetails } from "./utilities/projectUtils";
+import { promptForTargetLanguage, promptForSourceLanguage } from "./utilities/projectUtils";
 
 async function updateProjectSettings(projectDetails: ProjectDetails) {
-  const projectSettings = workspace.getConfiguration("codex-project-manager");
+  const projectSettings = workspace.getConfiguration("obs-extension");
   if (projectDetails.projectName) {
     await projectSettings.update(
       "projectName",
@@ -62,6 +64,14 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(ObsEditorProvider.register(context));
   context.subscriptions.push(StoryOutlineProvider.register(context));
   context.subscriptions.push(ProjectManagerProvider.register(context));
+
+  context.subscriptions.push(
+    workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration("obs-extension")) {
+        // TODO: UPDATE METADATA FILE
+      }
+    })
+  );
 
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.DOWNLOAD_SOURCE, () => console.log("download"))
@@ -117,13 +127,49 @@ export async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.PROMPT_TARGET, async () => {
-      // TODO: Figure out how to change target language with OBS SB
+      const config = workspace.getConfiguration();
+      const existingTargetLanguage = config.get("targetLanguage") as any;
+      console.log("existingTargetLanguage", existingTargetLanguage);
+      if (existingTargetLanguage) {
+        const overwrite = await window.showWarningMessage(
+          `The target language is already set to ${existingTargetLanguage.refName}. Do you want to overwrite it?`,
+          "Yes",
+          "No"
+        );
+        if (overwrite === "Yes") {
+          const projectDetails = await promptForTargetLanguage();
+          const targetLanguage = projectDetails?.targetLanguage;
+          if (targetLanguage) {
+            await updateProjectSettings(projectDetails);
+            window.showInformationMessage(`Target language updated to ${targetLanguage.refName}.`);
+          }
+        } else {
+          window.showInformationMessage("Target language update cancelled.");
+        }
+      } else {
+        const projectDetails = await promptForTargetLanguage();
+        const targetLanguage = projectDetails?.targetLanguage;
+        if (targetLanguage) {
+          await updateProjectSettings(projectDetails);
+          window.showInformationMessage(`Target language set to ${targetLanguage.refName}.`);
+        }
+      }
     })
   );
 
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.PROMPT_SOURCE, async () => {
-      // TODO: Figure out how to change source language with OBS SB
+      try {
+        const projectDetails = await promptForSourceLanguage();
+        const sourceLanguage = projectDetails?.sourceLanguage;
+        console.log("sourceLanguage", sourceLanguage);
+        if (sourceLanguage) {
+          await updateProjectSettings(projectDetails);
+          window.showInformationMessage(`Source language set to ${sourceLanguage.refName}.`);
+        }
+      } catch (error) {
+        window.showErrorMessage(`Failed to set source language: ${error}`);
+      }
     })
   );
 
