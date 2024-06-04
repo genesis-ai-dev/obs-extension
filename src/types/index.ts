@@ -34,6 +34,7 @@ export enum COMMAND_TYPE {
   PROMPT_SOURCE = "obs-extension.promptUserForSourceLanguage",
   DOWNLOAD_SOURCE = "obs-extension.downloadSourceTextBibles",
   SET_TARGET_FONT = "obs-extension.setEditorFontToTargetLanguage",
+  OPEN_STORY = "obs-extension.openStory",
 }
 
 export enum MessageType {
@@ -81,3 +82,7 @@ export type DownloadedResource = {
 };
 
 export type ObsStory = Record<string, any>;
+
+export type AnyObject = {
+  [key: string]: any;
+};

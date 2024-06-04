@@ -13,6 +13,8 @@ import { ProjectManagerProvider } from "./providers/projectManagerProvider";
 import { COMMAND_TYPE } from "./types";
 import type { ProjectDetails } from "./utilities/projectUtils";
 import { promptForTargetLanguage, promptForSourceLanguage } from "./utilities/projectUtils";
+import { createObsProject } from "./utilities/createObsProject";
+import { VIEW_TYPES } from "./types";
 
 async function updateProjectSettings(projectDetails: ProjectDetails) {
   const projectSettings = workspace.getConfiguration("obs-extension");
@@ -115,7 +117,18 @@ export async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.INITIALIZE_NEW_PROJECT, async () => {
-      // TODO: Create OBS SB files
+      let config = workspace.getConfiguration();
+
+      createObsProject({
+        projectName: config.get("obs-extension.projectName", ""),
+        description: config.get("obs-extension.description", ""),
+        abbreviation: config.get("obs-extension.abbreviation", ""),
+        targetLanguage: config.get("obs-extension.targetLanguage", { tag: "", name: { "": "" } }),
+        username: config.get("obs-extension.username", ""),
+        email: "",
+        name: "",
+        copyright: {},
+      });
     })
   );
 
@@ -182,6 +195,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.START_TRANSLATING, async () => {
       commands.executeCommand("workbench.view.extension.stories-outline");
+      commands.executeCommand(COMMAND_TYPE.OPEN_STORY, "01");
     })
   );
 
@@ -208,6 +222,43 @@ export async function activate(context: ExtensionContext) {
         },
         true
       );
+    })
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand(COMMAND_TYPE.OPEN_STORY, async (storyNumber: Number) => {
+      try {
+        // Open ObsEditor Panel on Left
+        const editableStoryURI = Uri.joinPath(
+          workspace?.workspaceFolders?.[0].uri as Uri,
+          "ingredients",
+          `${storyNumber}.md`
+        );
+
+        await commands.executeCommand("vscode.openWith", editableStoryURI, VIEW_TYPES.EDITOR, {
+          preserveFocus: true,
+          preview: false,
+          viewColumn: ViewColumn.One,
+        });
+
+        const readOnlyStoryURI = Uri.joinPath(
+          workspace?.workspaceFolders?.[0].uri as Uri,
+          ".project",
+          "resources",
+          "obs",
+          "content",
+          `${storyNumber}.md`
+        );
+
+        // Open ObsReadOnly Panel on right
+        await commands.executeCommand("vscode.openWith", readOnlyStoryURI, VIEW_TYPES.EDITOR, {
+          preserveFocus: false,
+          preview: false,
+          viewColumn: ViewColumn.Two,
+        });
+      } catch (error) {
+        window.showErrorMessage(`Failed to set Open OBS Story ${storyNumber}: ${error}`);
+      }
     })
   );
 }

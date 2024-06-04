@@ -2,8 +2,7 @@ import * as vscode from "vscode";
 
 import { getNonce } from "../utilities/getNonce";
 import { getUri } from "../utilities/getUri";
-import { VIEW_TYPES } from "../types";
-import { MessageType } from "../types";
+import { VIEW_TYPES, COMMAND_TYPE, MessageType } from "../types";
 import { initializeStateStore } from "../stateStore";
 
 /**
@@ -62,54 +61,17 @@ export class StoryOutlineProvider implements vscode.WebviewViewProvider {
             return;
           }
 
-          if (!(e.payload as Record<string, any>).storyNumber) {
+          const storyNumber = (e.payload as Record<string, any>).storyNumber;
+
+          if (!storyNumber) {
             console.error("No story number provided");
             return;
           }
 
-          // Open ObsEditor Panel on Left
-          const editableStoryURI = vscode.Uri.joinPath(
-            vscode.workspace?.workspaceFolders?.[0].uri,
-            "ingredients",
-            `${(e.payload as Record<string, any>)?.storyNumber}.md`
-          );
+          // Open OBS Panels
+          vscode.commands.executeCommand(COMMAND_TYPE.OPEN_STORY, storyNumber);
 
-          await vscode.commands.executeCommand(
-            "vscode.openWith",
-            editableStoryURI,
-            VIEW_TYPES.EDITOR,
-            {
-              preserveFocus: true,
-              preview: false,
-              viewColumn: vscode.ViewColumn.One,
-            }
-          );
-
-          const readOnlyStoryURI = vscode.Uri.joinPath(
-            vscode.workspace?.workspaceFolders?.[0].uri,
-            ".project",
-            "resources",
-            "obs",
-            "content",
-            `${(e.payload as Record<string, any>)?.storyNumber}.md`
-          );
-
-          // Open ObsReadOnly Panel on right
-          await vscode.commands.executeCommand(
-            "vscode.openWith",
-            readOnlyStoryURI,
-            VIEW_TYPES.EDITOR,
-            {
-              preserveFocus: false,
-              preview: false,
-              viewColumn: vscode.ViewColumn.Two,
-            }
-          );
-
-          await this._context?.workspaceState?.update(
-            "currentStoryId",
-            (e.payload as Record<string, any>)?.storyNumber
-          );
+          await this._context?.workspaceState?.update("currentStoryId", storyNumber);
 
           if (!this.stateStore) {
             this.stateStore = await initializeStateStore();
@@ -118,7 +80,7 @@ export class StoryOutlineProvider implements vscode.WebviewViewProvider {
           this.stateStore?.updateStoreState({
             key: "obsRef",
             value: {
-              storyId: (e.payload as Record<string, any>)?.storyNumber,
+              storyId: storyNumber,
               paragraph: "1",
             },
           });
