@@ -249,7 +249,7 @@
     "build:webview": "cd webview-ui && pnpm run build",
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
-    "postcompile": "copyfiles -u 1 src/**/*.md out",
+    "postcompile": "copyfiles -u 1 src/**/*.md src/media/**/* out",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts"
