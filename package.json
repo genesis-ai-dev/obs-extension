@@ -5,7 +5,8 @@
   "version": "0.0.1",
   "publisher": "project-accelerate",
   "engines": {
-    "vscode": "^1.75.0"
+    "node": ">=18",
+    "vscode": "^1.78.0"
   },
   "main": "./out/extension.js",
   "contributes": {
@@ -120,6 +121,11 @@
           "type": "object",
           "default": {},
           "description": "Target language for the OBS project"
+        },
+        "obs-extension.obsSource": {
+          "type": "object",
+          "default": {},
+          "description": "Downloaded OBS to use for ReadOnly OBS"
         }
       }
     },

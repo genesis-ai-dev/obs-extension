@@ -1,6 +1,7 @@
 import { window } from "vscode";
-import { LanguageMetadata, LanguageProjectStatus, Project } from "codex-types";
+import { LanguageMetadata, LanguageProjectStatus } from "codex-types";
 import { LanguageCodes } from "./languageUtils";
+import { fetchResource } from "./fetchResources";
 
 export interface ProjectDetails {
   projectName?: string;
@@ -9,6 +10,12 @@ export interface ProjectDetails {
   abbreviation?: string;
   sourceLanguage?: LanguageMetadata;
   targetLanguage?: LanguageMetadata;
+  obsSource?: DCSResource;
+}
+
+export interface DCSResource {
+  language_title: string;
+  language: string;
 }
 
 export async function promptForTargetLanguage(): Promise<ProjectDetails | undefined> {
@@ -70,3 +77,27 @@ export async function promptForSourceLanguage(): Promise<ProjectDetails | undefi
     sourceLanguage,
   };
 }
+
+export const promptForObsSource = async () => {
+  const resources = await fetchResource(false, [], [], "obs");
+
+  const resourceDownloadPick = await window.showQuickPick(
+    resources.map((resource: DCSResource) => `${resource.language_title} (${resource.language})`),
+    {
+      placeHolder: "Select the source language",
+    }
+  );
+
+  if (!resourceDownloadPick) {
+    return;
+  }
+
+  const resourceToDownload = resources.find(
+    (resource: DCSResource) =>
+      `${resource.language_title} (${resource.language})` === resourceDownloadPick
+  );
+  if (!resourceToDownload) {
+    return;
+  }
+  return { obsSource: resourceToDownload };
+};
