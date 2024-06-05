@@ -1,7 +1,7 @@
 import { window } from "vscode";
 import { LanguageMetadata, LanguageProjectStatus } from "codex-types";
 import { LanguageCodes } from "./languageUtils";
-import { fetchResource } from "./fetchResources";
+import { Meta } from "../types";
 
 export interface ProjectDetails {
   projectName?: string;
@@ -78,11 +78,9 @@ export async function promptForSourceLanguage(): Promise<ProjectDetails | undefi
   };
 }
 
-export const promptForObsSource = async () => {
-  const resources = await fetchResource(false, [], [], "obs");
-
+export const promptForObsSource = async (resources: Meta[]) => {
   const resourceDownloadPick = await window.showQuickPick(
-    resources.map((resource: DCSResource) => `${resource.language_title} (${resource.language})`),
+    resources.map((resource: Meta) => `${resource.language_title} (${resource.language})`),
     {
       placeHolder: "Select the source language",
     }

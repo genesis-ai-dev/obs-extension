@@ -10,7 +10,7 @@ import {
 import { ObsEditorProvider } from "./providers/ObsEditorProvider";
 import { StoryOutlineProvider } from "./providers/storyOutlineProvider";
 import { ProjectManagerProvider } from "./providers/projectManagerProvider";
-import { COMMAND_TYPE } from "./types";
+import { COMMAND_TYPE, Meta } from "./types";
 import type { ProjectDetails } from "./utilities/projectUtils";
 import {
   promptForTargetLanguage,
@@ -20,6 +20,7 @@ import {
 import { createObsProject } from "./utilities/createObsProject";
 import { downloadResource } from "./utilities/download";
 import { VIEW_TYPES } from "./types";
+import { fetchResource } from "./utilities/fetchResources";
 
 async function updateProjectSettings(projectDetails: ProjectDetails) {
   const projectSettings = workspace.getConfiguration("obs-extension");
@@ -75,6 +76,8 @@ async function updateProjectSettings(projectDetails: ProjectDetails) {
 }
 
 export async function activate(context: ExtensionContext) {
+  const downloadableObsList: Meta[] = await fetchResource(false, [], [], "obs");
+
   context.subscriptions.push(ObsEditorProvider.register(context));
   context.subscriptions.push(StoryOutlineProvider.register(context));
   context.subscriptions.push(ProjectManagerProvider.register(context));
@@ -149,7 +152,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.PROMPT_TARGET, async () => {
       const config = workspace.getConfiguration();
-      const existingTargetLanguage = config.get("targetLanguage") as any;
+      const existingTargetLanguage = config.get("obs-extension.targetLanguage") as any;
       console.log("existingTargetLanguage", existingTargetLanguage);
       if (existingTargetLanguage) {
         const overwrite = await window.showWarningMessage(
@@ -197,17 +200,17 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand(COMMAND_TYPE.DOWNLOAD_SOURCE, async () => {
       const config = workspace.getConfiguration();
-      const existingObsSource = config.get("obsSource") as any;
+      const existingObsSource = config.get("obs-extension.obsSource") as any;
 
       try {
         if (existingObsSource) {
           const overwrite = await window.showWarningMessage(
-            `The OBS Source files are already set to ${existingObsSource.language_title}. Do you want to overwrite them?`,
+            `The OBS Source files are already set to ${existingObsSource.language_title} (${existingObsSource.language}). Do you want to overwrite them?`,
             "Yes",
             "No"
           );
           if (overwrite === "Yes") {
-            const projectDetails = await promptForObsSource();
+            const projectDetails = await promptForObsSource(downloadableObsList);
             const obsSource = projectDetails?.obsSource;
             if (obsSource) {
               await updateProjectSettings(projectDetails);
@@ -220,7 +223,7 @@ export async function activate(context: ExtensionContext) {
             window.showInformationMessage("OBS source files update cancelled.");
           }
         } else {
-          const projectDetails = await promptForObsSource();
+          const projectDetails = await promptForObsSource(downloadableObsList);
           const obsSource = projectDetails?.obsSource;
           if (obsSource) {
             await updateProjectSettings(projectDetails);
