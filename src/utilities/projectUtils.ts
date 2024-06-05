@@ -97,5 +97,5 @@ export const promptForObsSource = async (resources: Meta[]) => {
   if (!resourceToDownload) {
     return;
   }
-  return { obsSource: resourceToDownload };
+  return resourceToDownload;
 };

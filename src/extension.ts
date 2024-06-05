@@ -210,10 +210,17 @@ export async function activate(context: ExtensionContext) {
             "No"
           );
           if (overwrite === "Yes") {
-            const projectDetails = await promptForObsSource(downloadableObsList);
-            const obsSource = projectDetails?.obsSource;
+            const obsSource = await promptForObsSource(downloadableObsList);
             if (obsSource) {
-              await updateProjectSettings(projectDetails);
+              const obsSourceSettings = {
+                url: obsSource.url,
+                name: obsSource.name,
+                owner: obsSource.owner,
+                language: obsSource.language,
+                language_title: obsSource.language_title,
+                title: obsSource.title,
+              };
+              await updateProjectSettings({ obsSource: obsSourceSettings });
               window.showInformationMessage(
                 `OBS source files updated to ${obsSource.language_title} (${obsSource.language}).`
               );
@@ -223,10 +230,17 @@ export async function activate(context: ExtensionContext) {
             window.showInformationMessage("OBS source files update cancelled.");
           }
         } else {
-          const projectDetails = await promptForObsSource(downloadableObsList);
-          const obsSource = projectDetails?.obsSource;
+          const obsSource = await promptForObsSource(downloadableObsList);
           if (obsSource) {
-            await updateProjectSettings(projectDetails);
+            const obsSourceSettings = {
+              url: obsSource.url,
+              name: obsSource.name,
+              owner: obsSource.owner,
+              language: obsSource.language,
+              language_title: obsSource.language_title,
+              title: obsSource.title,
+            };
+            await updateProjectSettings({ obsSource: obsSourceSettings });
             window.showInformationMessage(
               `OBS source files set to ${obsSource.language_title} (${obsSource.language}).`
             );

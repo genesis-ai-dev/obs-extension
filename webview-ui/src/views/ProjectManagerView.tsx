@@ -86,7 +86,7 @@ function ProjectManagerView() {
                 type: MessageType.DOWNLOAD_SOURCE_OBS,
               })
             }
-            buttonDescriptionText="Download Source Text Bibles"
+            buttonDescriptionText="Download Source OBS"
             buttonIcon="codicon-arrow-down"
           />
         </div>
