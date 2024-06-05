@@ -201,9 +201,22 @@
             "when": "workbenchState !== empty"
           },
           {
+            "id": "downloadSourceObs",
+            "title": "Download Source OBS Files",
+            "description": "Now that we have our configuration, let's initialize your new OBS project.\nThis will be necessary to view OBS source files during translation.\n[Download OBS Source Files](command:obs-extension.downloadSourceOBS)\n or \n [Import USFM Project](command:obs-extension.initializeImportProject)",
+            "media": {
+              "image": "./src/media/initialize-project.png",
+              "altText": "Download Source OBS"
+            },
+            "completionEvents": [
+              "onCommand:obs-extension.downloadSourceOBS"
+            ],
+            "when": "workbenchState !== empty"
+          },
+          {
             "id": "initializeProject",
             "title": "Create files",
-            "description": "Now that we have our congiguration, let's initialize your new OBS project.\n[Create New Project](command:obs-extension.initializeNewProject)\n or \n [Import USFM Project](command:obs-extension.initializeImportProject)",
+            "description": "Now that we have our configuration, let's initialize your new OBS project.\n[Create New Project](command:obs-extension.initializeNewProject)\n or \n [Import USFM Project](command:obs-extension.initializeImportProject)",
             "media": {
               "image": "./src/media/initialize-project.png",
               "altText": "Initialize Project"
@@ -259,6 +272,7 @@
   "dependencies": {
     "@vscode/codicons": "^0.0.36",
     "codex-types": "^0.0.2",
+    "jszip": "^3.10.1",
     "md5": "^2.3.0",
     "moment": "^2.30.1",
     "uuid": "^9.0.1"

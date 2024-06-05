@@ -18,6 +18,7 @@ import {
   promptForObsSource,
 } from "./utilities/projectUtils";
 import { createObsProject } from "./utilities/createObsProject";
+import { downloadResource } from "./utilities/download";
 import { VIEW_TYPES } from "./types";
 
 async function updateProjectSettings(projectDetails: ProjectDetails) {
@@ -197,36 +198,41 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand(COMMAND_TYPE.DOWNLOAD_SOURCE, async () => {
       const config = workspace.getConfiguration();
       const existingObsSource = config.get("obsSource") as any;
-      if (existingObsSource) {
-        const overwrite = await window.showWarningMessage(
-          `The OBS Source files are already set to ${existingObsSource.language_title}. Do you want to overwrite them?`,
-          "Yes",
-          "No"
-        );
-        if (overwrite === "Yes") {
+
+      try {
+        if (existingObsSource) {
+          const overwrite = await window.showWarningMessage(
+            `The OBS Source files are already set to ${existingObsSource.language_title}. Do you want to overwrite them?`,
+            "Yes",
+            "No"
+          );
+          if (overwrite === "Yes") {
+            const projectDetails = await promptForObsSource();
+            const obsSource = projectDetails?.obsSource;
+            if (obsSource) {
+              await updateProjectSettings(projectDetails);
+              window.showInformationMessage(
+                `OBS source files updated to ${obsSource.language_title} (${obsSource.language}).`
+              );
+              await downloadResource(obsSource);
+            }
+          } else {
+            window.showInformationMessage("OBS source files update cancelled.");
+          }
+        } else {
           const projectDetails = await promptForObsSource();
           const obsSource = projectDetails?.obsSource;
           if (obsSource) {
             await updateProjectSettings(projectDetails);
             window.showInformationMessage(
-              `OBS source files updated to ${obsSource.language_title} (${obsSource.language}).`
+              `OBS source files set to ${obsSource.language_title} (${obsSource.language}).`
             );
+            await downloadResource(obsSource);
           }
-        } else {
-          window.showInformationMessage("OBS source files update cancelled.");
         }
-      } else {
-        const projectDetails = await promptForObsSource();
-        const obsSource = projectDetails?.obsSource;
-        if (obsSource) {
-          await updateProjectSettings(projectDetails);
-          window.showInformationMessage(
-            `OBS source files set to ${obsSource.language_title} (${obsSource.language}).`
-          );
-        }
+      } catch (error) {
+        window.showErrorMessage(`Failed to download Source OBS: ${error}`);
       }
-      // TODO: ON PICKER CLICK, DOWNLOAD THE SELECTED RESOURCE
-      // TODO: ALERT USER OF DOWNLOAD STATUS
     })
   );
 
